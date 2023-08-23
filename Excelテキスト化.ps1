@@ -1,4 +1,4 @@
-﻿function outputLog($logString){
+function outputLog($logString){
 
   $Now = Get-Date
 
@@ -53,6 +53,8 @@ function ExcelToTSV($targetFile, $outFile, $startRow, $startCol, $existsCol, $ex
   outputLog ('出力対象データは' + ($lastrow - ($startRow - 1)) + '件です')
   
   # コピー範囲をクリップボードにコピーしてファイル出力
+  outputLog ('テキスト化範囲は(' + $startRow + '行,' + $startCol + '列)から(' + $lastrow + '行,' + $lastCol + '列)です')
+  $sourceSheet.range($sourceSheet.Cells($startRow, $startCol), $sourceSheet.Cells($lastrow, $lastCol)).Borders.LineStyle = 1 #テキスト化範囲に全て空白の列が存在する場合、テキスト化の際に列が削除される。そのため、テキスト化範囲に罫線を付ける
   $SourceRange = $sourceSheet.range($sourceSheet.Cells($startRow, $startCol), $sourceSheet.Cells($lastrow, $lastCol))
   if (!($SourceRange.copy())) {
     outputLog "コピーが失敗しました。"
