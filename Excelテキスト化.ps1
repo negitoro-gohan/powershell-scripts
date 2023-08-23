@@ -42,11 +42,11 @@ function ExcelToTSV($targetFile, $outFile, $startRow, $startCol, $existsCol, $ex
   
   # コピー範囲の特定
   #最大行数の特定
-  $lastRow = $sourceSheet.Range($sourceSheet.Cells(1000000, $existsCol), $sourceSheet.Cells(1000000, $existsCol)).End([Microsoft.Office.Interop.Excel.XlDirection]::xlUp.value__).Row
+  $lastRow = $sourceSheet.Range($sourceSheet.Cells($sourceSheet.UsedRange.Rows.Count, $existsCol), $sourceSheet.Cells($sourceSheet.UsedRange.Rows.Count, $existsCol)).End([Microsoft.Office.Interop.Excel.XlDirection]::xlUp.value__).Row
   outputLog ('最大行数は' + $lastRow + 'です')
   
   #最大列数の特定
-  $lastCol = $sourceSheet.Range($sourceSheet.Cells($existsRow, 10000), $sourceSheet.Cells($existsRow, 10000)).End([Microsoft.Office.Interop.Excel.XlDirection]::xlToLeft.value__).Column
+  $lastCol = $sourceSheet.Range($sourceSheet.Cells($existsRow, $sourceSheet.UsedRange.Columns.Count), $sourceSheet.Cells($existsRow, $sourceSheet.UsedRange.Columns.Count)).End([Microsoft.Office.Interop.Excel.XlDirection]::xlToLeft.value__).Column
   outputLog ('最大列数は' + $lastCol + 'です')
   
   #出力対象件数の出力
