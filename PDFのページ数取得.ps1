@@ -1,34 +1,34 @@
-# DLLƒtƒ@ƒCƒ‹–¼
+# DLLãƒ•ã‚¡ã‚¤ãƒ«å
 $dll_name = "PdfSharp.dll"
 
 function script:countPdfPage($filepath) {
-    # ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¯‚ê‚ÎŒã‘±ˆ—‚ğƒXƒLƒbƒv
+    # ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãªã‘ã‚Œã°å¾Œç¶šå‡¦ç†ã‚’ã‚¹ã‚­ãƒƒãƒ—
     if (!(Test-Path $filepath)) {
-        return 
+        return ""
     } 
 
-    # Šg’£q‚ªPDFˆÈŠO‚Å‚ ‚ê‚ÎŒã‘±ˆ—‚ğƒXƒLƒbƒv
+    # æ‹¡å¼µå­ãŒPDFä»¥å¤–ã§ã‚ã‚Œã°å¾Œç¶šå‡¦ç†ã‚’ã‚¹ã‚­ãƒƒãƒ—
     if ((Get-Item $filepath).Extension -ne ".pdf") {
-        return 
+        return ""
     }
 
     $input_pdf = [PdfSharp.Pdf.IO.PdfReader]::Open((Get-Item $filepath).Fullname, [PdfSharp.Pdf.IO.PdfDocumentOpenMode]::Import);
     $page_count = $input_pdf.PageCount
-    write-host $page_count
+    return $page_count
 }
 
-# DLL‚ÍƒXƒNƒŠƒvƒg‚Æ“¯ŠK‘w‚É’u‚­‚±‚Æ‚ğ‘z’è‚µ‚Ä‚¢‚é‚½‚ßƒJƒŒƒ“ƒgƒpƒX‚ğæ“¾
+# DLLã¯ã‚¹ã‚¯ãƒªãƒ—ãƒˆã¨åŒéšå±¤ã«ç½®ãã“ã¨ã‚’æƒ³å®šã—ã¦ã„ã‚‹ãŸã‚ã‚«ãƒ¬ãƒ³ãƒˆãƒ‘ã‚¹ã‚’å–å¾—
 $current_path = Split-Path -Parent $MyInvocation.MyCommand.Path
 $dll_path = Join-Path $current_path $dll_name
-#DLL“Ç‚İ‚İ
+#DLLèª­ã¿è¾¼ã¿
 [void][Reflection.Assembly]::LoadFile($dll_path)
 
 Set-Location $current_path
 
-#ƒtƒ@ƒCƒ‹“Ç‚İ‚İ
+#ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
 $rs = Import-Csv import.csv
 
 foreach ($r in $rs) {
-	#Write-Host $r       # s‚ğ•\¦
+	#Write-Host $r       # è¡Œã‚’è¡¨ç¤º
     countPdfPage $r.file
 }
