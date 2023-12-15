@@ -1,0 +1,20 @@
+# 検索するフォルダのパス
+$folderPath = "D:\powershell\notorderby\test"
+
+# フォルダ内のSQLファイルを取得
+$sqlFiles = Get-ChildItem -Path $folderPath 
+
+foreach ($file in $sqlFiles) {
+    $content = Get-Content $file.FullName -Raw
+
+    # セミコロンでSQL文を分割
+    $queries = $content -split ';'
+
+    # SELECTを含み、ORDER BYを含まないSQL文を抽出して出力
+    foreach ($query in $queries) {
+        if ($query -match "(?i)SELECT" -and $query -notmatch "(?i)ORDER BY") {
+            Write-Output "File: $($file.Name)"
+            Write-Output "Query: $query"
+        }
+    }
+}
