@@ -1,0 +1,35 @@
+# 対象のフォルダパス
+$folderPath = "D:\powershell\test"
+
+# 正規表現パターン
+$pattern = 'SELECT[\s\S]*?sqlDsSet'
+#$pattern = 'SELECT.*FROM'
+
+# フォルダ内のすべてのファイルに対して処理を行う
+$fileList = Get-ChildItem -Path $folderPath -File -Recurse
+if ($fileList.Count -gt 0) {
+    foreach ($file in $fileList){
+        $filePath = $file.FullName
+
+         # ファイルの内容を取得
+        $fileContent = Get-Content -Path $filePath -Raw
+        
+        # 行番号を使用して正規表現マッチング
+        $matches = [regex]::Matches($fileContent, $pattern)
+
+        Write-Output $matches
+
+        # マッチした文字列を表示
+        foreach ($match in $matches) {
+            
+            if ($match.Value -match '(?i)SELECT' -and $match.Value -notmatch '(?i)ORDER'){
+                $matchedText = $match.Value
+                Write-Output "ファイル: $($file.Name),  抽出された文字列: $matchedText"
+            }
+        }
+
+    }
+
+} else {
+    Write-Output "指定されたフォルダ内にファイルが見つかりませんでした。"
+}
